@@ -57,6 +57,11 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="metronome.js"></script>
 <script>
+    function getSearchParams(k){
+        var p={};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
+        return k?p[k]:p;
+    }
     /*global $ Raphael soundManager metronome*/
 
     function tick(t) {
@@ -84,6 +89,16 @@
 
     m.shapes().outline.attr("fill", "#00A30F");
     m.shapes().arm.attr("stroke", "#EEE");
+
+    var param_duration = getSearchParams("duration");
+    if (param_duration) {
+        $("#duration").val(param_duration);
+    }
+
+    var param_bpm = getSearchParams("bpm");
+    if (param_bpm) {
+        $("#tempo").val(param_bpm);
+    }
 </script>
 </body>
 </html>
