@@ -142,17 +142,21 @@ var metronome = function(opts) {
 					
 					//get values for tempo and ticks and restrict
 					var tempo = parseInt($('#tempo').val(), 10);
-					if (!tempo) { tempo = 60; }
-					else if (tempo > 200) { tempo = 200; }
-					else if (tempo < 30) { tempo = 30; }
+                    var param_bpm = getSearchParams("bpm");
+                    if (param_bpm) {
+                        tempo = param_bpm;
+                    }
+                    if (!tempo) { tempo = 60; }
+                    else if (tempo > 200) { tempo = 200; }
+                    else if (tempo < 30) { tempo = 30; }
 					$("#tempo").val(tempo);
 
                     var duration = parseInt($('#duration').val(), 10);
-                    if (!duration) { duration = 30; }
                     var param_duration = getSearchParams("duration");
                     if (param_duration) {
                         duration = param_duration;
                     }
+                    if (!duration) { duration = 30; }
                     $("#duration").val(duration);
 
                     var ticks = tempo / 60 * duration;
