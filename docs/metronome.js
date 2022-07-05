@@ -73,7 +73,13 @@ var metronome = function(opts) {
                 end_func();
             }    
         }
-    }    
+    }
+
+    function getSearchParams(k){
+        var p={};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
+        return k?p[k]:p;
+    }
 
     return {
         start: function(tempo, repeats, tickf, donef) {
@@ -120,9 +126,11 @@ var metronome = function(opts) {
         make_input: function(el) {
         	$("<div />", {
         		html: 	"<span>tempo: </span>" + 
-        				"<input class='metr_input' type='text' id='tempo' value='100' />" +
+        				"<input class='metr_input' type='text' id='tempo' value='60' />" +
+                        "<span>duration: </span>" +
+                        "<input class='metr_input' type='text' id='duration' value='60' />" +
 						"<span>ticks: </span>" +
-						"<input class='metr_input' type='text' id='ticks' value='8' />" +
+						"<input class='metr_input' type='text' id='ticks' disabled='disabled' />" +
 						"<button id='startstop'>start</button>" +
 						"<div id='count'>0</div>"
         	}).appendTo(el);
@@ -138,11 +146,20 @@ var metronome = function(opts) {
 					else if (tempo > 200) { tempo = 200; }
 					else if (tempo < 30) { tempo = 30; }
 					$("#tempo").val(tempo);
-					
-					var ticks = parseInt($('#ticks').val(), 10);
-					if (!ticks) { ticks = 20; }
-					else if (ticks > 60) { ticks = 60; }
-					else if (ticks < 8) { ticks = 8; }
+
+                    var duration = parseInt($('#duration').val(), 10);
+                    if (!duration) { duration = 30; }
+                    var param_duration = getSearchParams("duration");
+                    if (param_duration) {
+                        duration = param_duration;
+                    }
+                    $("#duration").val(duration);
+
+                    var ticks = tempo / 60 * duration;
+                    // var ticks = parseInt($('#ticks').val(), 10);
+					// if (!ticks) { ticks = 20; }
+					// else if (ticks > 60) { ticks = 60; }
+					// else if (ticks < 8) { ticks = 8; }
 					$("#ticks").val(ticks); 
 					
 					m.start(tempo, ticks);
