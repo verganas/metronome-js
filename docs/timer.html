@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Javascript Timer</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <style>
+        body {
+            font-family: Verdana,serif;
+        }
+        p {
+            background-color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0;
+            height: 70px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<p id="countdown"></p>
+<button type="button" id="start">Start</button>
+<script>
+    function getSearchParams(k) {
+        var p = {};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (s, k, v) {
+            p[k] = v
+        })
+        return k ? p[k] : p;
+    }
+
+    let seconds = getSearchParams("seconds");
+    if (!seconds) seconds = 10;
+    let intervalId = 0;
+    const countDownEl = document.getElementById('countdown');
+    document.getElementById('start').addEventListener('click', () => {
+        intervalId = setInterval(updateCountdown, 1000);
+    })
+
+    function updateCountdown() {
+        if (seconds <= 0) {
+            clearInterval(intervalId);
+            var sound = document.createElement('audio');
+            sound.setAttribute('src', 'down1.wav');
+            sound.setAttribute('id', 'alarm');
+            document.body.appendChild(sound);
+            setTimeout(() => document.getElementById('alarm').play());
+        }
+        const m = Math.floor(seconds % 3600 / 60);
+        const s = Math.floor(seconds % 3600 % 60);
+        const secondsFormatted = s < 10 ? '0' + s : s;
+        countDownEl.innerHTML = `${m}:${secondsFormatted}`;
+        seconds--;
+    }
+</script>
+</body>
+</html>
